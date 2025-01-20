@@ -36,6 +36,21 @@ class TapBigQuery(SQLTap):
                 "automatically determines ALL available BigQuery schemas."
             ),
         ),
+        th.Property(
+            "client_secrets",
+            th.ObjectType(
+                th.Property("type", th.StringType, required=False),
+                th.Property("private_key_id", th.StringType, required=True),
+                th.Property("private_key", th.StringType, required=True),
+                th.Property("client_email", th.StringType, required=True),
+                th.Property("client_id", th.StringType, required=True),
+                th.Property("auth_uri", th.StringType, required=False),
+                th.Property("token_uri", th.StringType, required=False),
+                th.Property("auth_provider_x509_cert_url", th.StringType, required=False),
+                th.Property("client_x509_cert_url", th.StringType, required=False),
+                th.Property("universe_domain", th.StringType, required=False),
+            ),
+        )
     ).to_dict()
 
     default_stream_class: type[SQLStream] = BigQueryStream

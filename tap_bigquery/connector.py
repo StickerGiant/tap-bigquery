@@ -26,6 +26,25 @@ class BigQueryConnector(SQLConnector):
         Returns:
             A new SQLAlchemy Engine.
         """
+        if self.config.get("client_secrets"):
+            secrets_dict = self.config.get("client_secrets")
+            return sqlalchemy.create_engine(
+                self.sqlalchemy_url,
+                echo=False,
+                credentials_info={
+                    "type": secrets_dict.get("type") or "service_account",  
+                    "project_id": self.config.get("project_id"),
+                    "private_key_id": secrets_dict.get("private_key_id"),
+                    "private_key": secrets_dict.get("private_key"),
+                    "client_email": secrets_dict.get("client_email"),
+                    "client_id": secrets_dict.get("client_id"),
+                    "auth_uri": secrets_dict.get("auth_uri") or "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": secrets_dict.get("token_uri") or "https://oauth2.googleapis.com/token",
+                    "auth_provider_x509_cert_url": secrets_dict.get("auth_provider_x509_cert_url") or "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_x509_cert_url": secrets_dict.get("client_x509_cert_url") or "https://www.googleapis.com/robot/v1/metadata/x509/bigquery-access%40metabase-test-358815.iam.gserviceaccount.com",
+                    "universe_domain": secrets_dict.get("universe_domain") or "googleapis.com",
+                    },
+            )
         if self.config.get("credentials_path"):
             return sqlalchemy.create_engine(
                 self.sqlalchemy_url,
